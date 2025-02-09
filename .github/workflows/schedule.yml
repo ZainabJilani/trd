@@ -1,0 +1,25 @@
+name: Run Shoonya Order Script
+
+on:
+  schedule:
+    - cron: '31 3 * * *'  # This runs at 9:01 AM IST (IST = UTC + 5:30, so 9:01 AM IST = 3:31 AM UTC)
+    
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run the Python script
+      run: python restricted_watchlist.py
