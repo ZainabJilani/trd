@@ -1,4 +1,3 @@
 pyotp
-api_helper
 pandas
 yfinance
