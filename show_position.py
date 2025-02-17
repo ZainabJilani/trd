@@ -1,8 +1,10 @@
+import time
+import datetime
 import pyotp
 from api_helper import ShoonyaApiPy
 
 TOTP_SECRET = "A435644437VR523W3EV7K7AM76647YCZ"
-TICK_SIZE = 0.05  # Tick size for rounding prices
+TICK_SIZE = 0.05
 
 class ShoonyaApp:
     def __init__(self):
@@ -31,68 +33,64 @@ class ShoonyaApp:
         return totp.now()
 
     def show_position(self):
-        """Check for open positions and place a limit order if any position exists."""
-        if not self.api:
-            print("You must log in first!")
-            return
+        """Check for open positions and place orders automatically."""
+        while True:  # Infinite loop
+            now = datetime.datetime.now()
+            market_open = now.replace(hour=9, minute=15, second=0)
+            market_close = now.replace(hour=15, minute=14, second=0)
 
-        try:
-            print("Fetching positions...")
-            response = self.api.get_positions()
+            if market_open <= now <= market_close:  # Only run during market hours
+                print(f"Checking positions at {now.strftime('%H:%M:%S')}...")
 
-            # Check if the response is valid
-            if response and response[0].get('stat') == 'Ok':
-                positions = response
-                for pos in positions:
-                    symbol = pos['tsym']
-                    quantity = int(pos['netqty'])
-                    avg_price = float(pos['netavgprc'])
-                    current_price = float(pos['lp'])
+                try:
+                    response = self.api.get_positions()
+                    if response and response[0].get('stat') == 'Ok':
+                        positions = response
+                        for pos in positions:
+                            symbol = pos['tsym']
+                            quantity = int(pos['netqty'])
+                            avg_price = float(pos['netavgprc'])
 
-                    # If there is an open position, place a limit order
-                    if quantity != 0:  # If there's a position (long or short)
-                        print(f"Position found for {symbol}. Placing limit order...")
+                            if quantity != 0:
+                                print(f"Position found for {symbol}. Placing limit order...")
 
-                        # If the position is long (buy order), place a sell order
-                        if quantity > 0:
-                            limit_price = avg_price * 1.05  # 1% above average price for sell
-                            limit_price = self.round_to_tick_size(limit_price)
-                            self.place_order(symbol, 'S', quantity, limit_price)
-                        # If the position is short (sell order), place a buy order
-                        elif quantity < 0:
-                            limit_price = avg_price * 0.99  # 1% below average price for buy
-                            limit_price = self.round_to_tick_size(limit_price)
-                            self.place_order(symbol, 'B', abs(quantity), limit_price)
-
+                                if quantity > 0:
+                                    limit_price = self.round_to_tick_size(avg_price * 1.01)
+                                    self.place_order(symbol, 'S', quantity, limit_price)
+                                elif quantity < 0:
+                                    limit_price = self.round_to_tick_size(avg_price * 0.99)
+                                    self.place_order(symbol, 'B', abs(quantity), limit_price)
+                            else:
+                                print(f"No open position for {symbol}. No order placed.")
                     else:
-                        print(f"No open position for {symbol}. No order placed.")
+                        print("No positions available.")
+                except Exception as e:
+                    print(f"Error while fetching positions: {e}")
             else:
-                print("No positions available.")
-        except Exception as e:
-            print(f"Error while fetching positions: {e}")
+                print("Market closed. Exiting script.")
+                break  # Exit loop after market hours
+
+            time.sleep(60)  # Wait 1 minute before checking again
 
     def round_to_tick_size(self, price):
-        """Round the price to the nearest multiple of the tick size."""
+        """Round price to nearest tick size."""
         return round(price / TICK_SIZE) * TICK_SIZE
 
     def place_order(self, symbol, action, quantity, limit_price):
         """Place a limit order."""
-        print(f"Placing {action} order for {symbol} at price {limit_price} with quantity {quantity}.")
-
+        print(f"Placing {action} order for {symbol} at {limit_price} with quantity {quantity}.")
         try:
-            # Replace 'symbol' with 'tradingsymbol' to match the correct parameter name for place_order
             order_response = self.api.place_order(
-                tradingsymbol=symbol,  # Changed from 'symbol' to 'tradingsymbol'
+                tradingsymbol=symbol,
                 quantity=quantity,
                 price=limit_price,
                 price_type='LMT',
-                product_type='I',  # Assuming 'I' for Intraday
+                product_type='I',
                 buy_or_sell=action,
                 exchange='NSE',
                 discloseqty=0,
                 retention='DAY'
             )
-            
             if order_response and order_response.get('stat') == 'Ok':
                 print(f"Order placed successfully for {symbol} at {limit_price}.")
             else:
@@ -100,7 +98,7 @@ class ShoonyaApp:
         except Exception as e:
             print(f"Error while placing order: {e}")
 
-# Example usage:
+# Run the script
 app = ShoonyaApp()
-app.login()  # Perform login
-app.show_position()  # Check positions and place order if any
+app.login()
+app.show_position()
