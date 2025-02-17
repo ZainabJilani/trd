@@ -1,5 +1,6 @@
 import time
 import datetime
+print("Script started at:", datetime.datetime.now())
 import pyotp
 from api_helper import ShoonyaApiPy
 
