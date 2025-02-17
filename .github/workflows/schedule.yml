@@ -2,7 +2,7 @@ name: Run Shoonya Order Script
 
 on:
   schedule:
-    - cron: '45 3-9 * * 1-5'  # Runs from 9:15 AM IST to 3:14 PM IST (converted to UTC)
+    - cron: '15 3-14 * * 1-5'  # This runs from 9:15 AM IST to 3:14 PM IST (IST = UTC + 5:30)
   workflow_dispatch:
 
 jobs:
@@ -20,8 +20,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-    python -m pip install --upgrade pip
-    pip install -r trd/requirements.txt
+        python -m pip install --upgrade pip
+        pip install -r trd/requirements.txt  # Correct path for requirements.txt
 
     - name: Run the Python script
-      run: python show_position.py
+      run: python trd/show_position.py  # Add 'trd/' before 'show_position.py'
