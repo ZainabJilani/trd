@@ -2,7 +2,7 @@ name: Run Shoonya Order Script
 
 on:
   schedule:
-    - cron: '15 3-14 * * 1-5'  # This runs from 9:15 AM IST to 3:14 PM IST (IST = UTC + 5:30, so 9:15 AM IST = 3:45 AM UTC, 3:14 PM IST = 9:44 AM UTC)
+    - cron: '45 3-9 * * 1-5'  # Runs from 9:15 AM IST to 3:14 PM IST (converted to UTC)
   workflow_dispatch:
 
 jobs:
