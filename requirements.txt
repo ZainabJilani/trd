@@ -2,3 +2,4 @@ pyotp
 pandas
 yfinance
 NorenRestApiPy
+websocket-client
