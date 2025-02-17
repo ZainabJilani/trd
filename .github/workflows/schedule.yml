@@ -22,4 +22,4 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run the Python script
-      run: python restricted_watchlist.py
+      run: python show_position.py
