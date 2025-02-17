@@ -1,6 +1,5 @@
 import time
 import datetime
-print("Script started at:", datetime.datetime.now())
 import pyotp
 from api_helper import ShoonyaApiPy
 
@@ -37,7 +36,6 @@ class ShoonyaApp:
         """Check for open positions and place orders automatically."""
         while True:  # Infinite loop
             now = datetime.datetime.now()
-            print("Current Local Time:", now)
             market_open = now.replace(hour=9, minute=15, second=0)
             market_close = now.replace(hour=15, minute=14, second=0)
 
