@@ -1,7 +1,10 @@
 import time
 import datetime
 import pyotp
+import os
+import pytz
 from api_helper import ShoonyaApiPy
+
 
 TOTP_SECRET = "A435644437VR523W3EV7K7AM76647YCZ"
 TICK_SIZE = 0.05
@@ -35,7 +38,8 @@ class ShoonyaApp:
     def show_position(self):
         """Check for open positions and place orders automatically."""
         while True:  # Infinite loop
-            now = datetime.datetime.now()
+            india_tz = pytz.timezone("Asia/Kolkata")
+            now = datetime.datetime.now(india_tz)
             market_open = now.replace(hour=9, minute=15, second=0)
             market_close = now.replace(hour=15, minute=14, second=0)
 
