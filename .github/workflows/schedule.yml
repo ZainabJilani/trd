@@ -21,6 +21,9 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt  # Correct path for requirements.txt
+    
+    - name: Check time
+      run: echo "Current time: $(date)"    
 
     - name: Run the Python script
       run: python show_position.py  # Add 'trd/' before 'show_position.py'
