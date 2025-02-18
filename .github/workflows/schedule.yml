@@ -3,7 +3,7 @@ name: Run Shoonya Order Script
 on:
   schedule:
     - cron: '45 3 * * 1-5'  # This runs at 9:15 AM IST (3:45 AM UTC) on weekdays (Monday to Friday)
-
+  workflow_dispatch:
 jobs:
   run-script:
     runs-on: ubuntu-latest
