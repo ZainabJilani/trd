@@ -59,7 +59,7 @@ class ShoonyaApp:
                                     limit_price = self.round_to_tick_size(avg_price * 1.01)
                                     self.place_order(symbol, 'S', quantity, limit_price)
                                 elif quantity < 0:
-                                    limit_price = self.round_to_tick_size(avg_price * 0.99)
+                                    limit_price = self.round_to_tick_size(avg_price * 0.97)
                                     self.place_order(symbol, 'B', abs(quantity), limit_price)
                             else:
                                 print(f"No open position for {symbol}. No order placed.")
