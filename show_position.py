@@ -38,7 +38,7 @@ class ShoonyaApp:
         while True:  # Infinite loop
             now = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))
             market_open = now.replace(hour=9, minute=15, second=0)
-            market_close = now.replace(hour=15, minute=14, second=0)
+            market_close = now.replace(hour=12, minute=02, second=0)
 
             if market_open <= now <= market_close:  # Only run during market hours
                 print(f"Checking positions at {now.strftime('%H:%M:%S')}...")
