@@ -2,8 +2,8 @@ name: Run Shoonya Order Script
 
 on:
   schedule:
-    - cron: '14 7 * * 1-5'  # This runs from 9:15 AM IST to 3:14 PM IST (IST = UTC + 5:30)
-  
+    - cron: '5 8 * * 1-5'  # Runs at 9:15 AM IST, Monday to Friday (IST = UTC + 5:30)
+  workflow_dispatch:  # Allows manual triggering of the workflow if needed
 
 jobs:
   run-script:
@@ -20,7 +20,10 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt  # Correct path for requirements.txt
+        pip install -r requirements.txt  # Install necessary Python dependencies
 
     - name: Run the Python script
-      run: python show_position.py  # Add 'trd/' before 'show_position.py'
+      env:
+        API_TOKEN: ${{ secrets.API_TOKEN }}  # Access the API token stored in GitHub Secrets
+      run: |
+        python show_position.py  # Add 'trd/' if the file is inside a subdirectory
