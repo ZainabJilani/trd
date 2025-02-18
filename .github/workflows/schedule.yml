@@ -2,7 +2,7 @@ name: Run Shoonya Order Script
 
 on:
   schedule:
-    - cron: '45 3 * * 1-5'  # This runs from 9:15 AM IST to 3:14 PM IST (IST = UTC + 5:30)
+    - cron: '53 4 * * 1-5'  # This runs from 9:15 AM IST to 3:14 PM IST (IST = UTC + 5:30)
   workflow_dispatch:
 
 jobs:
