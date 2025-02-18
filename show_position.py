@@ -39,10 +39,16 @@ class ShoonyaApp:
         """Check for open positions and place orders automatically."""
         while True:  # Infinite loop
             india_tz = pytz.timezone("Asia/Kolkata")
-            now = datetime.datetime.now(india_tz)
-            market_open = now.replace(hour=9, minute=15, second=0)
-            market_close = now.replace(hour=15, minute=14, second=0)
+            ist_now = datetime.datetime.now(india_tz)
+print(f"🕒 IST Time: {ist_now.strftime('%Y-%m-%d %H:%M:%S')}")
 
+# Define Market Open and Close
+market_open = ist_now.replace(hour=9, minute=15, second=0, microsecond=0)
+market_close = ist_now.replace(hour=15, minute=14, second=0, microsecond=0)
+if market_open <= ist_now <= market_close:
+    print("✅ Market is OPEN")
+else:
+    print("❌ Market is CLOSED")
             if market_open <= now <= market_close:  # Only run during market hours
                 print(f"Checking positions at {now.strftime('%H:%M:%S')}...")
 
