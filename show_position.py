@@ -16,7 +16,7 @@ class ShoonyaApp:
         self.api = ShoonyaApiPy()
         otp = self.generate_totp()
         response = self.api.login(
-            userid='FA54835',
+            userid='FA5483',
             password='Galia@123',
             twoFA=otp,
             imei='abc1234',
